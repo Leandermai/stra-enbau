@@ -8,9 +8,17 @@
 <body>
   <div id="app">
     <h1>Straßenbau – Deine AI Roadmap</h1>
-    <input v-model="prompt" placeholder="Gib deinen Prompt ein..." style="width: 300px; padding: 0.5rem;" />
-    <button @click="generateRoadmap" style="margin-left: 1rem;">Generieren</button>
-    <pre v-if="roadmap" style="margin-top: 2rem; white-space: pre-wrap;">{{ roadmap }}</pre>
+    <input
+      v-model="prompt"
+      placeholder="Gib deinen Prompt ein..."
+      style="width: 300px; padding: 0.5rem;"
+    />
+    <button @click="generateRoadmap" style="margin-left: 1rem;">
+      Generieren
+    </button>
+    <pre v-if="roadmap" style="margin-top: 2rem; white-space: pre-wrap;">
+{{ roadmap }}
+    </pre>
   </div>
 
   <script>
@@ -25,13 +33,24 @@
       },
       methods: {
         async generateRoadmap() {
-          const res = await fetch('http://localhost:3000/api/roadmap', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ prompt: this.prompt })
-          });
-          const data = await res.json();
-          this.roadmap = data.roadmap || 'Fehler beim Generieren.';
+          try {
+            const res = await fetch('http://localhost:3000/api/roadmap', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ prompt: this.prompt })
+            });
+
+            if (!res.ok) {
+              throw new Error(`Server antwortete mit Status ${res.status}`);
+            }
+
+            const data = await res.json();
+            console.log('Antwort vom Server:', data);
+            this.roadmap = data.roadmap || 'Fehler beim Generieren.';
+          } catch (error) {
+            console.error('Fetch Fehler:', error);
+            this.roadmap = `Fehler: ${error.message}`;
+          }
         }
       }
     }).mount('#app');
