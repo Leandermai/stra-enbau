@@ -27,26 +27,27 @@ app.post("/api/roadmap", async (req, res) => {
           {
             role: "user",
             content: `
-        Erstelle eine ausführliche Lern-Roadmap zum Thema: **${prompt}**.
+        Create a detailed learning roadmap for the topic: **${prompt}**.
         
-        Bitte gib die einzelnen Schritte **genau in folgendem Format** aus (keine Abweichungen):
+        Instructions:
+        - Detect and use the **same language** as the prompt topic.
+        - Return the roadmap in the following strict format:
         
-        **1** **Titel des Schritts** **Persönlich formulierte Beschreibung in 1-3 Sätzen.**
+        **1** **Title of the step** **Personal, engaging, and detailed description (1–3 sentences).**
         
-        **2** **Nächster Titel** **Persönlich formulierte Beschreibung in 1-3 Sätzen.**
+        **2** **Next title** **Description...**
         
-        Format-Hinweise für dich:
-        - Die Sprache soll **auf Deutsch** sein.
-        - Jeder Schritt soll so formuliert sein, dass er den Lernenden **direkt anspricht** („Lerne …“, „Entdecke …“, „Verstehe …“).
-        - Die **Beschreibung soll motivierend, hilfreich und ausführlich** sein – mindestens 1 vollständiger Satz, gerne mehr.
-        - Verwende **kein Fließtext**, **keine Listen**, **keine Einleitungen oder Schlüsse**, nur die nummerierten Schritte im Format wie oben gezeigt.
-        - Keine zusätzlichen Kommentare oder Erklärungen außerhalb des Roadmaps-Formats.
+        Guidelines:
+        - Format exactly as above: no bullet points, no introduction or conclusion.
+        - Speak directly to the learner ("Learn …", "Explore …", etc.)
+        - Make the description at least one full sentence — detailed, friendly, and helpful.
+        - Do **not** add any extra text outside the numbered roadmap.
         
-        Beispiel für Ton und Stil:
-        **1** **Grundlagen verstehen** **Lerne die wichtigsten Begriffe und Konzepte kennen, um dir ein solides Fundament aufzubauen. Du wirst überrascht sein, wie schnell du erste kleine Erfolge erzielen kannst!**
+        Example (if German input):
+        **1** **Grundlagen verstehen** **Lerne wichtige Begriffe und Konzepte kennen, um ein solides Fundament aufzubauen.**
         
-        Beginne jetzt mit der Erstellung der Roadmap.
-            `.trim(),
+        Begin the roadmap now.
+        `.trim(),
           },
         ],
 
