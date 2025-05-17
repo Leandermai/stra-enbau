@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Straßenbau – AI Roadmap</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+  <div id="app">
+    <h1>Straßenbau – Deine AI Roadmap</h1>
+    <input v-model="prompt" placeholder="Gib deinen Prompt ein..." style="width: 300px; padding: 0.5rem;" />
+    <button @click="generateRoadmap" style="margin-left: 1rem;">Generieren</button>
+    <pre v-if="roadmap" style="margin-top: 2rem; white-space: pre-wrap;">{{ roadmap }}</pre>
+  </div>
+
+  <script>
+    const { createApp } = Vue;
+
+    createApp({
+      data() {
+        return {
+          prompt: '',
+          roadmap: ''
+        };
+      },
+      methods: {
+        async generateRoadmap() {
+          const res = await fetch('http://localhost:3000/api/roadmap', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: this.prompt })
+          });
+          const data = await res.json();
+          this.roadmap = data.roadmap || 'Fehler beim Generieren.';
+        }
+      }
+    }).mount('#app');
+  </script>
+</body>
+</html>
