@@ -28,8 +28,10 @@ function parseRoadmapString(input) {
     parsedSteps.push({ id, title, description });
   }
   steps.value = parsedSteps;
+  /*Debugging
   console.log('Parsed Steps:', steps.value);
   console.log("Roadmap value:", roadmap.value);
+  */
 }
 const generateRoadmapString = async () => {
   try {
