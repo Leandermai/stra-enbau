@@ -1,44 +1,67 @@
-const express = require('express');
-const axios = require('axios');
-require('dotenv').config(); // Für den API-Schlüssel
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import axios from "axios";
+
+dotenv.config();
 
 const app = express();
-app.use(express.json()); // Für JSON-Request-Body
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
+app.use(express.json());
 
-const GROQ_API_KEY = process.env.GROQ_API_KEY;
-const GROQ_API_URL = 'https://api.groq.com/v1'; // Überprüfe die URL
+const PORT = 3000;
 
-// Beispiel-Route für eine POST-Anfrage
-app.post('/groq', async (req, res) => {
+app.post("/api/roadmap", async (req, res) => {
+  const { prompt } = req.body;
+
   try {
-    const { question } = req.body; // Erwartet eine Frage im Body
+    const response = await axios.post(
+      "https://api.groq.com/openai/v1/chat/completions",
+      {
+        model: "llama3-8b-8192",
+        messages: [
+          {
+            role: "user",
+            content: `
+            Erstelle eine Lern-Roadmap zum Thema: ${prompt}.
 
-    if (!question) {
-      return res.status(400).json({ error: 'Bitte stelle eine Frage' });
-    }
+            Bitte gib die Schritte **immer im folgenden Format** aus:
 
-    // Setze API-Key in Header oder als Umgebungsvariable
-    const headers = {
-      'Authorization': `Bearer ${GROQ_API_KEY}`,
-      'Content-Type': 'application/json',
-    };
+            **1** **Titel des Schritts** **Kurze Beschreibung in 1–2 Sätzen.**
 
-    // Erstelle Payload für Groq API
-    const payload = {
-      // Hier müsstest du die genaue Payload-Struktur für die Groq API prüfen
-      question,
-    };
+            **2** **Nächster Titel** **Beschreibung...**
 
-    const response = await axios.post(`${GROQ_API_URL}/endpoint`, payload, { headers });
+            Die Ausgabe soll:
+            - auf Deutsch sein
+            - keine zusätzlichen Kommentare enthalten
+            - exakt diesem Format folgen
+            `.trim(),
+          },
+        ],
 
-    // Verarbeite die Antwort von Groq und sende sie zurück
-    const answer = response.data; // Passe dies an die tatsächliche Antwortstruktur an
-    res.json(answer);
+        temperature: 0.3,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const aiReply = response.data.choices[0].message.content;
+    res.json({ roadmap: aiReply });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Interner Serverfehler' });
+    // Mehr Details im Fehler-Log:
+    console.error("Groq API Error:", error.response?.data || error.message);
+    res.status(500).json({ error: "Something went wrong." });
   }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server läuft auf Port ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});

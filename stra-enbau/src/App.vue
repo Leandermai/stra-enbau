@@ -20,16 +20,16 @@ function parseRoadmapString(input) {
   const stepRegex = /\*\*(\d+)\*\*\*\*(.+?)\*\*\*\*(.+?)\*\*/g;
   let match;
 
-  while ((match = stepRegex.exec(input)) !== null) {
+  while ((match = stepRegex.exec(roadmap.value)) !== null) {
     const id = parseInt(match[1], 10);
     const title = match[2].trim();
     const description = match[3].trim();
     steps.push({ id, title, description });
   }
-
-  console.log(steps);
+  steps.value = steps;
+  console.log('Parsed Steps:', steps);
+  console.log("Roadmap value:", roadmap.value);
 }
-
 const generateRoadmapString = async () => {
   try {
     const res = await fetch('http://localhost:3000/api/roadmap', {
@@ -55,8 +55,8 @@ const generateRoadmapString = async () => {
 
 const submit = async () => {
   if (text.value.trim() !== '') {
-    regextestbutton();            
-    parseRoadmapString(regexTest);          
+    await generateRoadmapString();
+    parseRoadmapString(roadmap.value);          
     confirmed.value = true;                     
   }
 }
@@ -83,7 +83,7 @@ const regextestbutton = () => {
 
   <div v-else class="card-container">
     <h1 class="title">Your Roadmap for "{{ text }}"</h1>
-    <div v-for="step in steps" :key="step.id" class="card step-card">
+    <div v-for="step in roadmap.value" :key="step.id" class="card step-card">
       <h3>{{ step.title }}</h3>
       <p>{{ step.description }}</p>
     </div>
