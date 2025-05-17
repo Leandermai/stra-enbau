@@ -15,19 +15,20 @@ const roadmap = ref('')
 
 const regexTest = "**1****A****asdasdasdad****2****B****zzzzzzzzzz****3****C****vbbbbbbbbbbbb****4****D****hhhhhhhhhhhhh****5****E****eeeeeeeeee**";
 
+
 function parseRoadmapString(input) {
-  steps = [];
-  const stepRegex = /\*\*(\d+)\*\*\*\*(.+?)\*\*\*\*(.+?)\*\*/g;
+  const parsedSteps = [];
+  const stepRegex = /\*\*(\d+)\*\*\s\*\*(.+?)\*\*\s\*\*(.+?)\*\*/g;
   let match;
 
   while ((match = stepRegex.exec(roadmap.value)) !== null) {
     const id = parseInt(match[1], 10);
     const title = match[2].trim();
     const description = match[3].trim();
-    steps.push({ id, title, description });
+    parsedSteps.push({ id, title, description });
   }
-  steps.value = steps;
-  console.log('Parsed Steps:', steps);
+  steps.value = parsedSteps;
+  console.log('Parsed Steps:', steps.value);
   console.log("Roadmap value:", roadmap.value);
 }
 const generateRoadmapString = async () => {
@@ -83,7 +84,7 @@ const regextestbutton = () => {
 
   <div v-else class="card-container">
     <h1 class="title">Your Roadmap for "{{ text }}"</h1>
-    <div v-for="step in roadmap.value" :key="step.id" class="card step-card">
+    <div v-for="step in steps" :key="step.id" class="card step-card">
       <h3>{{ step.title }}</h3>
       <p>{{ step.description }}</p>
     </div>
