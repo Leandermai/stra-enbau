@@ -27,23 +27,30 @@ app.post("/api/roadmap", async (req, res) => {
           {
             role: "user",
             content: `
-            Erstelle eine Lern-Roadmap zum Thema: ${prompt}.
-
-            Bitte gib die Schritte **immer im folgenden Format** aus:
-
-            **1** **Titel des Schritts** **Kurze Beschreibung in 1–2 Sätzen.**
-
-            **2** **Nächster Titel** **Beschreibung...**
-
-            Die Ausgabe soll:
-            - auf Deutsch sein
-            - keine zusätzlichen Kommentare enthalten
-            - exakt diesem Format folgen
+        Erstelle eine ausführliche Lern-Roadmap zum Thema: **${prompt}**.
+        
+        Bitte gib die einzelnen Schritte **genau in folgendem Format** aus (keine Abweichungen):
+        
+        **1** **Titel des Schritts** **Persönlich formulierte Beschreibung in 1-3 Sätzen.**
+        
+        **2** **Nächster Titel** **Persönlich formulierte Beschreibung in 1-3 Sätzen.**
+        
+        Format-Hinweise für dich:
+        - Die Sprache soll **auf Deutsch** sein.
+        - Jeder Schritt soll so formuliert sein, dass er den Lernenden **direkt anspricht** („Lerne …“, „Entdecke …“, „Verstehe …“).
+        - Die **Beschreibung soll motivierend, hilfreich und ausführlich** sein – mindestens 1 vollständiger Satz, gerne mehr.
+        - Verwende **kein Fließtext**, **keine Listen**, **keine Einleitungen oder Schlüsse**, nur die nummerierten Schritte im Format wie oben gezeigt.
+        - Keine zusätzlichen Kommentare oder Erklärungen außerhalb des Roadmaps-Formats.
+        
+        Beispiel für Ton und Stil:
+        **1** **Grundlagen verstehen** **Lerne die wichtigsten Begriffe und Konzepte kennen, um dir ein solides Fundament aufzubauen. Du wirst überrascht sein, wie schnell du erste kleine Erfolge erzielen kannst!**
+        
+        Beginne jetzt mit der Erstellung der Roadmap.
             `.trim(),
           },
         ],
 
-        temperature: 0.3,
+        temperature: 0.5,
       },
       {
         headers: {
