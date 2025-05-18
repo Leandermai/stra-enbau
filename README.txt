@@ -20,14 +20,11 @@ stra-enbau/
 ## 🚀 Startanleitung
 
 1. **Repository klonen**
-   ```bash
    git clone <dein-repo-link>
    cd stra-enbau
 
 2. **Abhängigkeiten installieren**
-    npm install
-    npm install --prefix frontend
-    npm install --prefix backend
+   npm install && npm install --prefix frontend && npm install --prefix backend
 
 3. **.env im Backend erstellen und eigenen API Key von Groq hinzufügen**
     https://console.groq.com/home
